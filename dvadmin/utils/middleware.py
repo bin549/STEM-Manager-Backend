@@ -2,21 +2,17 @@
 日志 django中间件
 """
 import json
-
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.utils.deprecation import MiddlewareMixin
-
 from dvadmin.system.models import OperationLog
-from dvadmin.utils.request_util import get_request_user, get_request_ip, get_request_data, get_request_path, get_os, \
-    get_browser, get_verbose_name
+from dvadmin.utils.request_util import get_request_user, get_request_ip, get_request_data, get_request_path, get_os,  get_browser, get_verbose_name
 
 
 class ApiLoggingMiddleware(MiddlewareMixin):
     """
     用于记录API访问日志中间件
     """
-
     def __init__(self, get_response=None):
         super().__init__(get_response)
         self.enable = getattr(settings, 'API_LOG_ENABLE', None) or False
@@ -58,7 +54,8 @@ class ApiLoggingMiddleware(MiddlewareMixin):
             'status': True if response.data.get('code') in [2000, ] else False,
             'json_result': {"code": response.data.get('code'), "msg": response.data.get('msg')},
         }
-        operation_log, creat = OperationLog.objects.update_or_create(defaults=info, id=self.operation_log_id)
+        operation_log, creat = OperationLog.objects.update_or_create(
+            defaults=info, id=self.operation_log_id)
         if not operation_log.request_modular and settings.API_MODEL_MAP.get(request.request_path, None):
             operation_log.request_modular = settings.API_MODEL_MAP[request.request_path]
             operation_log.save()

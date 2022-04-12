@@ -7,10 +7,8 @@
 @Remark: 公共基础model类
 """
 import uuid
-
 from django.apps import apps
 from django.db import models
-
 from application import settings
 
 table_prefix = settings.TABLE_PREFIX  # 数据库表名前缀

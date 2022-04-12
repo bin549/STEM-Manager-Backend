@@ -1,17 +1,7 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2021/6/6 006 12:39
-@Remark: 自定义过滤器
-"""
-import operator
 from collections import OrderedDict
-import re
 from functools import reduce
-
-import six
 from django.db.models import Q, F
 from django.db.models.constants import LOOKUP_SEP
 from django_filters import utils
@@ -19,8 +9,10 @@ from django_filters.filters import CharFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters.utils import get_model_field
 from rest_framework.filters import BaseFilterBackend
-
 from dvadmin.system.models import Dept, ApiWhiteList
+import re
+import operator
+import six
 
 
 def get_dept(dept_id: int, dept_all_list=None, dept_list=None):
@@ -54,6 +46,7 @@ class DataLevelPermissionsFilter(BaseFilterBackend):
     4. 只为仅本人数据权限时只返回过滤本人数据，并且部门为自己本部门(考虑到用户会变部门，只能看当前用户所在的部门数据)
     5. 自定数据权限 获取部门，根据部门过滤
     """
+
     def filter_queryset(self, request, queryset, view):
         """
         接口白名单是否认证数据权限
@@ -94,7 +87,8 @@ class DataLevelPermissionsFilter(BaseFilterBackend):
                 return queryset.filter(dept_belong_id=user_dept_id)
 
             # 3. 根据所有角色 获取所有权限范围
-            role_list = request.user.role.filter(status=1).values('admin', 'data_range')
+            role_list = request.user.role.filter(
+                status=1).values('admin', 'data_range')
             dataScope_list = []
             for ele in role_list:
                 # 3.1 判断用户是否为超级管理员角色/如果有1(所有数据) 则返回所有数据
@@ -111,7 +105,8 @@ class DataLevelPermissionsFilter(BaseFilterBackend):
             dept_list = []
             for ele in dataScope_list:
                 if ele == 4:
-                    dept_list.extend(request.user.role.filter(status=1).values_list('dept__id', flat=True))
+                    dept_list.extend(request.user.role.filter(
+                        status=1).values_list('dept__id', flat=True))
                 elif ele == 2:
                     dept_list.append(user_dept_id)
                 elif ele == 1:
@@ -209,7 +204,8 @@ class CustomDjangoFilterBackend(DjangoFilterBackend):
                             undefined.append(field_name)
 
                         for lookup_expr in lookups:
-                            filter_name = cls.get_filter_name(field_name, lookup_expr)
+                            filter_name = cls.get_filter_name(
+                                field_name, lookup_expr)
 
                             # If the filter is explicitly declared on the class, skip generation
                             if filter_name in cls.declared_filters:
@@ -217,11 +213,13 @@ class CustomDjangoFilterBackend(DjangoFilterBackend):
                                 continue
 
                             if field is not None:
-                                filters[filter_name] = cls.filter_for_field(field, field_name, lookup_expr)
+                                filters[filter_name] = cls.filter_for_field(
+                                    field, field_name, lookup_expr)
 
                     # Allow Meta.fields to contain declared filters *only* when a list/tuple
                     if isinstance(cls._meta.fields, (list, tuple)):
-                        undefined = [f for f in undefined if f not in cls.declared_filters]
+                        undefined = [
+                            f for f in undefined if f not in cls.declared_filters]
 
                     if undefined:
                         raise TypeError(
@@ -251,13 +249,15 @@ class CustomDjangoFilterBackend(DjangoFilterBackend):
             orm_lookups = []
             for search_field in filterset.filters:
                 if isinstance(filterset.filters[search_field], CharFilter):
-                    orm_lookups.append(self.construct_search(six.text_type(search_field)))
+                    orm_lookups.append(self.construct_search(
+                        six.text_type(search_field)))
                 else:
                     orm_lookups.append(search_field)
             conditions = []
             queries = []
             for search_term_key in filterset.data.keys():
-                orm_lookup = self.find_filter_lookups(orm_lookups, search_term_key)
+                orm_lookup = self.find_filter_lookups(
+                    orm_lookups, search_term_key)
                 if not orm_lookup:
                     continue
                 query = Q(**{orm_lookup: filterset.data[search_term_key]})

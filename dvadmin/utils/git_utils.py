@@ -25,7 +25,8 @@ class GitRepository(object):
             os.makedirs(self.local_path)
         git_local_path = os.path.join(self.local_path, '.git')
         if not is_git_dir(git_local_path):
-            self.repo = Repo.clone_from(repo_url, to_path=self.local_path, branch=branch)
+            self.repo = Repo.clone_from(
+                repo_url, to_path=self.local_path, branch=branch)
         else:
             self.repo = Repo(self.local_path)
 

@@ -32,8 +32,8 @@ class ImportSerializerMixin:
         :return:
         """
         assert self.import_field_dict, (
-                "'%s' 请配置对应的导出模板字段。"
-                % self.__class__.__name__
+            "'%s' 请配置对应的导出模板字段。"
+            % self.__class__.__name__
         )
         # 导出模板
         if request.method == 'GET':
@@ -64,7 +64,8 @@ class ImportSerializerMixin:
                        hasattr(ele, 'unique') and ele.unique == True]
         for ele in data:
             # 获取 unique 字段
-            filter_dic = {i: ele.get(i) for i in list(set(self.import_field_dict.keys()) & set(unique_list))}
+            filter_dic = {i: ele.get(i) for i in list(
+                set(self.import_field_dict.keys()) & set(unique_list))}
             print(11, ele)
             instance = filter_dic and queryset.filter(**filter_dic).first()
             print(22, instance)
@@ -96,8 +97,8 @@ class ExportSerializerMixin:
         :return:
         """
         assert self.export_field_label, (
-                "'%s' 请配置对应的导出模板字段。"
-                % self.__class__.__name__
+            "'%s' 请配置对应的导出模板字段。"
+            % self.__class__.__name__
         )
         queryset = self.filter_queryset(self.get_queryset())
         data = self.export_serializer_class(queryset, many=True).data

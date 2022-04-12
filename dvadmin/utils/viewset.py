@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
 
 """
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2021/6/1 001 22:57
 @Remark: 自定义视图集
 """
 import uuid
-
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
-
 from dvadmin.utils.filters import DataLevelPermissionsFilter
 from dvadmin.utils.import_export_mixin import ExportSerializerMixin, ImportSerializerMixin
 from dvadmin.utils.json_response import SuccessResponse, ErrorResponse, DetailResponse
 from dvadmin.utils.permission import CustomPermission
 from django_restql.mixins import QueryArgumentsMixin
 
-class CustomModelViewSet(ModelViewSet,ImportSerializerMixin,ExportSerializerMixin,QueryArgumentsMixin):
+
+class CustomModelViewSet(ModelViewSet, ImportSerializerMixin, ExportSerializerMixin, QueryArgumentsMixin):
     """
     自定义的ModelViewSet:
     统一标准的返回格式;新增,查询,修改可使用不同序列化器
@@ -80,7 +76,8 @@ class CustomModelViewSet(ModelViewSet,ImportSerializerMixin,ExportSerializerMixi
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, request=request, partial=partial)
+        serializer = self.get_serializer(
+            instance, data=request.data, request=request, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
@@ -95,17 +92,19 @@ class CustomModelViewSet(ModelViewSet,ImportSerializerMixin,ExportSerializerMixi
         self.perform_destroy(instance)
         return DetailResponse(data=[], msg="删除成功")
 
+    keys = openapi.Schema(description='主键列表',
+                          type=openapi.TYPE_ARRAY, items=openapi.TYPE_STRING)
 
-    keys = openapi.Schema(description='主键列表',type=openapi.TYPE_ARRAY,items=openapi.TYPE_STRING)
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['keys'],
         properties={'keys': keys}
     ), operation_summary='批量删除')
-    @action(methods=['delete'],detail=False)
-    def multiple_delete(self,request,*args,**kwargs):
+    
+    @action(methods=['delete'], detail=False)
+    def multiple_delete(self, request, *args, **kwargs):
         request_data = request.data
-        keys = request_data.get('keys',None)
+        keys = request_data.get('keys', None)
         if keys:
             self.get_queryset().filter(id__in=keys).delete()
             return SuccessResponse(data=[], msg="删除成功")

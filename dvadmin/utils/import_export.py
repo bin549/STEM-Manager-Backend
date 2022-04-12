@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-
 import openpyxl
 from django.conf import settings
 
@@ -22,7 +21,8 @@ def import_to_data(file_url, field_data):
     # 创建一个空列表，存储Excel的数据
     tables = []
     for i, row in enumerate(range(table.max_row)):
-        if i == 0: continue
+        if i == 0:
+            continue
         array = {}
         for index, ele in enumerate(field_data.keys()):
             cell_value = table.cell(row=row + 1, column=index + 2).value

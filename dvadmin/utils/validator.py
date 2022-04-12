@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2021/6/2 002 17:03
 @Remark: 自定义验证器
 """
 
@@ -16,7 +13,6 @@ class CustomValidationError(APIException):
     """
     继承并重写验证器返回的结果,避免暴露字段
     """
-
     def __init__(self, detail):
         self.detail = detail
 
