@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
-
-"""
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2021/8/9 009 20:48
-@Remark:
-"""
 from rest_framework import serializers
-
 from dvadmin.system.models import FileList
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet

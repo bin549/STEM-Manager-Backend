@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+import re
+import operator
+import six
 from collections import OrderedDict
 from functools import reduce
 from django.db.models import Q, F
@@ -10,9 +12,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_filters.utils import get_model_field
 from rest_framework.filters import BaseFilterBackend
 from dvadmin.system.models import Dept, ApiWhiteList
-import re
-import operator
-import six
 
 
 def get_dept(dept_id: int, dept_all_list=None, dept_list=None):
@@ -42,7 +41,6 @@ class DataLevelPermissionsFilter(BaseFilterBackend):
     2. 如果用户没有关联角色则返回本部门数据
     3. 根据角色的最大权限进行数据过滤(会有多个角色，进行去重取最大权限)
     3.1 判断用户是否为超级管理员角色/如果有1(所有数据) 则返回所有数据
-
     4. 只为仅本人数据权限时只返回过滤本人数据，并且部门为自己本部门(考虑到用户会变部门，只能看当前用户所在的部门数据)
     5. 自定数据权限 获取部门，根据部门过滤
     """

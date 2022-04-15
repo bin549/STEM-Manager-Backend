@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-
-"""
-@Created on: 2021/6/1 001 23:05
-@Remark: 系统管理的路由文件
-"""
 from django.urls import path
 from rest_framework import routers
-
 from dvadmin.system.views.api_white_list import ApiWhiteListViewSet
 from dvadmin.system.views.area import AreaViewSet
 from dvadmin.system.views.button import ButtonViewSet
@@ -46,4 +40,5 @@ urlpatterns = [
     path('system_config/get_table_data/<int:pk>/', SystemConfigViewSet.as_view({'get': 'get_table_data'})),
     path('system_config/get_relation_info/', SystemConfigViewSet.as_view({'get': 'get_relation_info'})),
 ]
+
 urlpatterns += system_url.urls

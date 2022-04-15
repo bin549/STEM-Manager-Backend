@@ -2,7 +2,6 @@
 Request工具类
 """
 import json
-
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
 from django.urls.resolvers import ResolverMatch

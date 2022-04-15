@@ -92,15 +92,14 @@ class CustomModelViewSet(ModelViewSet, ImportSerializerMixin, ExportSerializerMi
         self.perform_destroy(instance)
         return DetailResponse(data=[], msg="删除成功")
 
-    keys = openapi.Schema(description='主键列表',
-                          type=openapi.TYPE_ARRAY, items=openapi.TYPE_STRING)
+    keys = openapi.Schema(description='主键列表', type=openapi.TYPE_ARRAY, items=openapi.TYPE_STRING)
 
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=['keys'],
         properties={'keys': keys}
     ), operation_summary='批量删除')
-    
+
     @action(methods=['delete'], detail=False)
     def multiple_delete(self, request, *args, **kwargs):
         request_data = request.data

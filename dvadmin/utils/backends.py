@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.utils import timezone
 
+
 logger = logging.getLogger(__name__)
 UserModel = get_user_model()
 
@@ -12,7 +13,6 @@ class CustomBackend(ModelBackend):
     """
     Django原生认证方式
     """
-
     def authenticate(self, request, username=None, password=None, **kwargs):
         msg = '%s 正在使用本地登录...' % username
         logger.info(msg)

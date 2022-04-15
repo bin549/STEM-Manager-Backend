@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from urllib.parse import quote
-
 from django.db import transaction
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from rest_framework.request import Request
-
 from dvadmin.utils.import_export import import_to_data
 from dvadmin.utils.json_response import DetailResponse
 from dvadmin.utils.request_util import get_verbose_name

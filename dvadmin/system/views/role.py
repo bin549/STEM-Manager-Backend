@@ -90,4 +90,3 @@ class RoleViewSet(CustomModelViewSet):
         queryset = Menu.objects.filter(status=1).all()
         serializer = MenuPermissonSerializer(queryset, many=True)
         return SuccessResponse(data=serializer.data)
-

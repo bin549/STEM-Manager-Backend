@@ -7,7 +7,6 @@ class GitRepository(object):
     """
     git仓库管理
     """
-
     def __init__(self, local_path, repo_url, branch='master'):
         self.local_path = local_path
         self.repo_url = repo_url

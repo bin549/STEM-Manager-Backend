@@ -1,8 +1,8 @@
-from dvadmin.system.models import Dept, Button, Menu, MenuButton, Role, Users
-from dvadmin.utils.core_initialize import CoreInitialize
 import datetime
 import os
 import django
+from dvadmin.system.models import Dept, Button, Menu, MenuButton, Role, Users
+from dvadmin.utils.core_initialize import CoreInitialize
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'application.settings')

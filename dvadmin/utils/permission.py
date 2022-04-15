@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-
-"""
-@Remark: 自定义权限
-"""
 import re
-
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import F
 from rest_framework.permissions import BasePermission
-
 from dvadmin.system.models import ApiWhiteList
 
 
@@ -34,7 +28,6 @@ class AnonymousUserPermission(BasePermission):
     """
     匿名用户权限
     """
-
     def has_permission(self, request, view):
         if isinstance(request.user, AnonymousUser):
             return False
@@ -58,7 +51,6 @@ def ReUUID(api):
 
 class CustomPermission(BasePermission):
     """自定义权限"""
-
     def has_permission(self, request, view):
         if isinstance(request.user, AnonymousUser):
             return False
@@ -86,11 +78,9 @@ class CustomPermission(BasePermission):
             api_white_list = [
                 str(item.get('permission__api').replace('{id}', '.*?')) + ":" + str(item.get('permission__method')) for
                 item in api_white_list if item.get('permission__api')]
-            # ********#
             if not hasattr(request.user, "role"):
                 return False
-            userApiList = request.user.role.values(
-                'permission__api', 'permission__method')  # 获取当前用户的角色拥有的所有接口
+            userApiList = request.user.role.values('permission__api', 'permission__method')  # 获取当前用户的角色拥有的所有接口
             ApiList = [
                 str(item.get('permission__api').replace('{id}', '.*?')) + ":" + str(item.get('permission__method')) for
                 item in

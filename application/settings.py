@@ -1,13 +1,11 @@
-from datetime import timedelta
-from conf.env import *
 import os
 import sys
+from datetime import timedelta
+from conf.env import *
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--z8%exyzt7e_%i@1+#1mm=%lb5=^fx_57=1@a+_y7bg5-w%)sm'
@@ -16,8 +14,6 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'plugins'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = locals().get('DEBUG', True)
 ALLOWED_HOSTS = locals().get('ALLOWED_HOSTS', ['*'])
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -67,9 +63,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'application.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': DATABASE_ENGINE,
@@ -80,11 +73,9 @@ DATABASES = {
         'PORT': DATABASE_PORT,
     }
 }
+
 AUTH_USER_MODEL = 'system.Users'
 USERNAME_FIELD = 'username'
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -142,7 +133,6 @@ CORS_ALLOW_CREDENTIALS = True  # 指明在跨域访问中，后端是否支持�
 # ================================================= #
 # ********************* 日志配置 ******************* #
 # ================================================= #
-
 # log 配置部分BEGIN #
 SERVER_LOGS_FILE = os.path.join(BASE_DIR, 'logs', 'server.log')
 ERROR_LOGS_FILE = os.path.join(BASE_DIR, 'logs', 'error.log')

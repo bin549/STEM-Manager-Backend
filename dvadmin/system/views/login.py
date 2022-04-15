@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2021/6/2 002 14:20
-@Remark:登录视图
-"""
 import base64
 import hashlib
 from datetime import datetime, timedelta
-
 from captcha.views import CaptchaStore, captcha_image
 from django.contrib import auth
 from django.contrib.auth import login
@@ -21,7 +14,6 @@ from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 from application import settings
 from dvadmin.system.models import Users
 from dvadmin.utils.json_response import SuccessResponse, ErrorResponse, DetailResponse
@@ -30,6 +22,7 @@ from dvadmin.utils.validator import CustomValidationError
 
 
 class CaptchaView(APIView):
+
     authentication_classes = []
     permission_classes = []
 
@@ -41,6 +34,7 @@ class CaptchaView(APIView):
         operation_id='captcha-get',
         operation_description='验证码获取',
     )
+
     def get(self, request):
         hashkey = CaptchaStore.generate_key()
         id = CaptchaStore.objects.filter(hashkey=hashkey).first().id
@@ -59,17 +53,17 @@ class LoginSerializer(TokenObtainPairSerializer):
     captcha = serializers.CharField(max_length=6)
 
     class Meta:
+
         model = Users
         fields = "__all__"
         read_only_fields = ["id"]
 
     default_error_messages = {
-        'no_active_account': _('账号/密码不正确')
+        'no_active_account': ('账号/密码不正确')
     }
 
     def validate_captcha(self, captcha):
-        self.image_code = CaptchaStore.objects.filter(
-            id=self.initial_data['captchaKey']).first()
+        self.image_code = CaptchaStore.objects.filter(id=self.initial_data['captchaKey']).first()
         five_minute_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
         if self.image_code and five_minute_ago > self.image_code.expiration:
             self.image_code and self.image_code.delete()
@@ -104,14 +98,13 @@ class LoginTokenSerializer(TokenObtainPairSerializer):
     """
     登录的序列化器:
     """
-
     class Meta:
         model = Users
         fields = "__all__"
         read_only_fields = ["id"]
 
     default_error_messages = {
-        'no_active_account': _('账号/密码不正确')
+        'no_active_account': ('账号/密码不正确')
     }
 
     def validate(self, attrs):
@@ -140,6 +133,7 @@ class LoginTokenView(TokenObtainPairView):
 
 
 class LogoutView(APIView):
+
     def post(self, request):
         return DetailResponse(msg="注销成功")
 
@@ -163,8 +157,7 @@ class ApiLogin(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-        user_obj = auth.authenticate(request, username=username,
-                                     password=hashlib.md5(password.encode(encoding='UTF-8')).hexdigest())
+        user_obj = auth.authenticate(request, username=username, password=hashlib.md5(password.encode(encoding='UTF-8')).hexdigest())
         if user_obj:
             login(request, user_obj)
             return redirect('/')

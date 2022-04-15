@@ -1,17 +1,8 @@
 # -*- coding: utf-8 -*-
-
-"""
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2021/6/3 003 0:30
-@Remark: 用户管理
-"""
 import hashlib
-
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.decorators import action
-
 from dvadmin.system.models import Users
 from dvadmin.utils.json_response import ErrorResponse, DetailResponse
 from dvadmin.utils.serializers import CustomModelSerializer
@@ -23,7 +14,6 @@ class UserSerializer(CustomModelSerializer):
     """
     用户管理-序列化器
     """
-
     class Meta:
         model = Users
         read_only_fields = ["id"]
@@ -37,10 +27,8 @@ class UserCreateSerializer(CustomModelSerializer):
     """
     用户新增-序列化器
     """
-    username = serializers.CharField(max_length=50,
-                                     validators=[CustomUniqueValidator(queryset=Users.objects.all(), message="账号必须唯一")])
-    password = serializers.CharField(required=False, default=make_password(
-        hashlib.md5('admin123456'.encode(encoding='UTF-8')).hexdigest()))
+    username = serializers.CharField(max_length=50, validators=[CustomUniqueValidator(queryset=Users.objects.all(), message="账号必须唯一")])
+    password = serializers.CharField(required=False, default=make_password(hashlib.md5('admin123456'.encode(encoding='UTF-8')).hexdigest()))
 
     def save(self, **kwargs):
         data = super().save(**kwargs)
@@ -60,8 +48,7 @@ class UserUpdateSerializer(CustomModelSerializer):
     """
     用户修改-序列化器
     """
-    username = serializers.CharField(max_length=50,
-                                     validators=[CustomUniqueValidator(queryset=Users.objects.all(), message="账号必须唯一")])
+    username = serializers.CharField(max_length=50, validators=[CustomUniqueValidator(queryset=Users.objects.all(), message="账号必须唯一")])
     password = serializers.CharField(required=False, allow_blank=True)
 
     def save(self, **kwargs):
