@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-@Remark: 自定义验证器
-"""
 from django.db import DataError
 from rest_framework.exceptions import APIException
 from rest_framework.validators import UniqueValidator
@@ -52,10 +49,7 @@ class CustomUniqueValidator(UniqueValidator):
         return queryset
 
     def __call__(self, value, serializer_field):
-        # Determine the underlying model field name. This may not be the
-        # same as the serializer field name if `source=<>` is set.
         field_name = serializer_field.source_attrs[-1]
-        # Determine the existing instance, if this is an update operation.
         instance = getattr(serializer_field.parent, 'instance', None)
         queryset = self.queryset
         queryset = self.filter_queryset(value, queryset, field_name)

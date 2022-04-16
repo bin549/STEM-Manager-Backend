@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import base64
 import hashlib
 from datetime import datetime, timedelta
@@ -46,10 +45,7 @@ class CaptchaView(APIView):
 
 
 class LoginSerializer(TokenObtainPairSerializer):
-    """
-    登录的序列化器:
-    重写djangorestframework-simplejwt的序列化器
-    """
+
     captcha = serializers.CharField(max_length=6)
 
     class Meta:
@@ -87,17 +83,13 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 
 class LoginView(TokenObtainPairView):
-    """
-    登录接口
-    """
+
     serializer_class = LoginSerializer
     permission_classes = []
 
 
 class LoginTokenSerializer(TokenObtainPairSerializer):
-    """
-    登录的序列化器:
-    """
+
     class Meta:
         model = Users
         fields = "__all__"
@@ -125,9 +117,6 @@ class LoginTokenSerializer(TokenObtainPairSerializer):
 
 
 class LoginTokenView(TokenObtainPairView):
-    """
-    登录获取token接口
-    """
     serializer_class = LoginTokenSerializer
     permission_classes = []
 
@@ -139,7 +128,7 @@ class LogoutView(APIView):
 
 
 class ApiLoginSerializer(CustomModelSerializer):
-    """接口文档登录-序列化器"""
+
     username = serializers.CharField()
     password = serializers.CharField()
 
@@ -149,7 +138,7 @@ class ApiLoginSerializer(CustomModelSerializer):
 
 
 class ApiLogin(APIView):
-    """接口文档的登录接口"""
+
     serializer_class = ApiLoginSerializer
     authentication_classes = []
     permission_classes = []
@@ -157,7 +146,8 @@ class ApiLogin(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-        user_obj = auth.authenticate(request, username=username, password=hashlib.md5(password.encode(encoding='UTF-8')).hexdigest())
+        # user_obj = auth.authenticate(request, username=username, password=hashlib.md5(password.encode(encoding='UTF-8')).hexdigest())
+        user_obj = auth.authenticate(request, username=username, password=password)
         if user_obj:
             login(request, user_obj)
             return redirect('/')

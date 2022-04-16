@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# # -*- coding: utf-8 -*-
 from dvadmin.system.models import ApiWhiteList
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
@@ -26,4 +26,4 @@ class ApiWhiteListViewSet(CustomModelViewSet):
     """
     queryset = ApiWhiteList.objects.all()
     serializer_class = ApiWhiteListSerializer
-    # permission_classes = []
+    permission_classes = []

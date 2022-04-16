@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2022/1/21 003 0:30
-@Remark: 系统配置
-"""
 import django_filters
 from django.db.models import Q
 from django_filters.rest_framework import BooleanFilter
 from rest_framework import serializers
-
 from dvadmin.system.models import SystemConfig
 from dvadmin.utils.filters import DataLevelPermissionsFilter
 from dvadmin.utils.json_response import DetailResponse, SuccessResponse, ErrorResponse
@@ -110,9 +103,6 @@ class SystemConfigFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = SystemConfig
         fields = ['id', 'parent', 'status', 'parent__isnull']
-
-
-
 
 
 class SystemConfigViewSet(CustomModelViewSet):

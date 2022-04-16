@@ -7,15 +7,14 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--z8%exyzt7e_%i@1+#1mm=%lb5=^fx_57=1@a+_y7bg5-w%)sm'
 sys.path.insert(0, os.path.join(BASE_DIR, 'plugins'))
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = locals().get('DEBUG', True)
 ALLOWED_HOSTS = locals().get('ALLOWED_HOSTS', ['*'])
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -28,6 +27,8 @@ INSTALLED_APPS = [
     'dvadmin.system',
     'drf_yasg',
     'captcha',
+    'course.apps.CourseConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -92,47 +93,27 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'zh-hans'
-
 TIME_ZONE = 'Asia/Shanghai'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = False
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
 STATIC_URL = '/static/'
-# # 设置django的静态文件目录
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-MEDIA_ROOT = 'media'  # 项目下的目录
+MEDIA_ROOT = 'media'
 MEDIA_URL = "/media/"  # 跟STATIC_URL类似，指定用户可以通过这个url找到文件
 
 # 收集静态文件，必须将 MEDIA_ROOT,STATICFILES_DIRS先注释
 # python manage.py collectstatic
 # STATIC_ROOT=os.path.join(BASE_DIR,'static')
-
-# ================================================= #
-# ******************* 跨域的配置 ******************* #
-# ================================================= #
-
-# 全部允许配置
 CORS_ORIGIN_ALLOW_ALL = True
-# 允许cookie
 CORS_ALLOW_CREDENTIALS = True  # 指明在跨域访问中，后端是否支持对cookie的操作
 
-# ================================================= #
-# ********************* 日志配置 ******************* #
-# ================================================= #
 # log 配置部分BEGIN #
 SERVER_LOGS_FILE = os.path.join(BASE_DIR, 'logs', 'server.log')
 ERROR_LOGS_FILE = os.path.join(BASE_DIR, 'logs', 'error.log')
@@ -186,7 +167,6 @@ LOGGING = {
         }
     },
     'loggers': {
-        # default日志
         '': {
             'handlers': ['console', 'error', 'file'],
             'level': 'INFO',
@@ -199,7 +179,6 @@ LOGGING = {
             'handlers': ['console', 'error', 'file'],
             'level': 'INFO',
         },
-        # 数据库相关日志
         'django.db.backends': {
             'handlers': [],
             'propagate': True,
@@ -208,15 +187,11 @@ LOGGING = {
     }
 }
 
-# ================================================= #
-# *************** REST_FRAMEWORK配置 *************** #
-# ================================================= #
-
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",  # 日期时间格式配置
     'DATE_FORMAT': "%Y-%m-%d",
     'DEFAULT_FILTER_BACKENDS': (
-        # 'django_filters.rest_framework.DjangoFilterBackend',
+        'django_filters.rest_framework.DjangoFilterBackend',
         'dvadmin.utils.filters.CustomDjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
@@ -227,16 +202,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # 只有经过身份认证确定用户身份才能访问
+        # 'rest_framework.permissions.IsAuthenticated',  # 只有经过身份认证确定用户身份才能访问
         # 'rest_framework.permissions.IsAdminUser', # is_staff=True才能访问 —— 管理员(员工)权限
-        # 'rest_framework.permissions.AllowAny', # 允许所有
+        'rest_framework.permissions.AllowAny', # 允许所有
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly', # 有身份 或者 只读访问(self.list,self.retrieve)
     ],
     'EXCEPTION_HANDLER': 'dvadmin.utils.exception.CustomExceptionHandler',  # 自定义的异常处理
 }
-# ================================================= #
-# ******************** 登录方式配置 ******************** #
-# ================================================= #
 
 AUTHENTICATION_BACKENDS = [
     'dvadmin.utils.backends.CustomBackend'
@@ -246,11 +218,8 @@ AUTHENTICATION_BACKENDS = [
 # ================================================= #
 
 SIMPLE_JWT = {
-    # token有效时长
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
-    # token刷新后的有效时间
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    # 设置前缀
     'AUTH_HEADER_TYPES': ('JWT',),
     'ROTATE_REFRESH_TOKENS': True,
 }
@@ -266,7 +235,6 @@ SWAGGER_SETTINGS = {
         }
     },
     # 如果需要登录才能够查看接口文档, 登录的链接使用restframework自带的.
-
     'LOGIN_URL': 'apiLogin/',
     # 'LOGIN_URL': 'rest_framework:login',
     'LOGOUT_URL': 'rest_framework:logout',
@@ -285,27 +253,20 @@ SWAGGER_SETTINGS = {
     'DEFAULT_AUTO_SCHEMA_CLASS': 'dvadmin.utils.swagger.CustomSwaggerAutoSchema',
 }
 
-# ================================================= #
-# **************** 验证码配置  ******************* #
-# ================================================= #
 CAPTCHA_STATE = True
 CAPTCHA_IMAGE_SIZE = (160, 60)  # 设置 captcha 图片大小
 CAPTCHA_LENGTH = 4  # 字符个数
 CAPTCHA_TIMEOUT = 1  # 超时(minutes)
 CAPTCHA_OUTPUT_FORMAT = '%(image)s %(text_field)s %(hidden_field)s '
-CAPTCHA_FONT_SIZE = 40  # 字体大小
-CAPTCHA_FOREGROUND_COLOR = '#0033FF'  # 前景色
-CAPTCHA_BACKGROUND_COLOR = '#F5F7F4'  # 背景色
+CAPTCHA_FONT_SIZE = 40
+CAPTCHA_FOREGROUND_COLOR = '#0033FF'
+CAPTCHA_BACKGROUND_COLOR = '#F5F7F4'
 CAPTCHA_NOISE_FUNCTIONS = (
-    'captcha.helpers.noise_arcs',  # 线
-    'captcha.helpers.noise_dots',  # 点
+    'captcha.helpers.noise_arcs',
+    'captcha.helpers.noise_dots',
 )
 # CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge' #字母验证码
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'  # 加减乘除验证码
-
-# ================================================= #
-# ******************** 其他配置 ******************** #
-# ================================================= #
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 API_LOG_ENABLE = True
@@ -317,7 +278,7 @@ API_MODEL_MAP = {
     "/api/plugins_market/plugins/": "插件市场",
 }
 # 表前缀
-TABLE_PREFIX = "dvadmin_"
+TABLE_PREFIX = ""
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 CELERY_TIMEZONE = 'Asia/Shanghai'  # celery 时区问题
 # 静态页面压缩

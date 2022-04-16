@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import (TokenRefreshView,)
 from application import settings
 from dvadmin.system.views.login import LoginView, CaptchaView, ApiLogin, LogoutView
 from dvadmin.utils.swagger import CustomOpenAPISchemaGenerator
+from django.contrib import admin
 
 
 schema_view = get_schema_view(
@@ -24,6 +25,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
@@ -34,4 +36,5 @@ urlpatterns = [
     re_path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/captcha/', CaptchaView.as_view()),
     path('apiLogin/', ApiLogin.as_view()),
+    path('api/', include('course.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_URL)

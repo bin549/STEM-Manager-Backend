@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import re
-import operator
+# import re
+# import operator
 import six
 from collections import OrderedDict
-from functools import reduce
+# from functools import reduce
 from django.db.models import Q, F
 from django.db.models.constants import LOOKUP_SEP
 from django_filters import utils
@@ -13,26 +13,26 @@ from django_filters.utils import get_model_field
 from rest_framework.filters import BaseFilterBackend
 from dvadmin.system.models import Dept, ApiWhiteList
 
-
-def get_dept(dept_id: int, dept_all_list=None, dept_list=None):
-    """
-    递归获取部门的所有下级部门
-    :param dept_id: 需要获取的部门id
-    :param dept_all_list: 所有部门列表
-    :param dept_list: 递归部门list
-    :return:
-    """
-    if not dept_all_list:
-        dept_all_list = Dept.objects.all().values('id', 'parent')
-    if dept_list is None:
-        dept_list = [dept_id]
-    for ele in dept_all_list:
-        if ele.get('parentId') == dept_id:
-            dept_list.append(ele.get('id'))
-            get_dept(ele.get('id'), dept_all_list, dept_list)
-    return list(set(dept_list))
-
-
+#
+# def get_dept(dept_id: int, dept_all_list=None, dept_list=None):
+#     """
+#     递归获取部门的所有下级部门
+#     :param dept_id: 需要获取的部门id
+#     :param dept_all_list: 所有部门列表
+#     :param dept_list: 递归部门list
+#     :return:
+#     """
+#     if not dept_all_list:
+#         dept_all_list = Dept.objects.all().values('id', 'parent')
+#     if dept_list is None:
+#         dept_list = [dept_id]
+#     for ele in dept_all_list:
+#         if ele.get('parentId') == dept_id:
+#             dept_list.append(ele.get('id'))
+#             get_dept(ele.get('id'), dept_all_list, dept_list)
+#     return list(set(dept_list))
+#
+#
 class DataLevelPermissionsFilter(BaseFilterBackend):
     """
     数据 级权限过滤器
@@ -75,15 +75,12 @@ class DataLevelPermissionsFilter(BaseFilterBackend):
             user_dept_id = getattr(request.user, 'dept_id', None)
             if not user_dept_id:
                 return queryset.none()
-
             # 1. 判断过滤的数据是否有创建人所在部门 "dept_belong_id" 字段
             if not getattr(queryset.model, 'dept_belong_id', None):
                 return queryset
-
             # 2. 如果用户没有关联角色则返回本部门数据
             if not hasattr(request.user, 'role'):
                 return queryset.filter(dept_belong_id=user_dept_id)
-
             # 3. 根据所有角色 获取所有权限范围
             role_list = request.user.role.filter(
                 status=1).values('admin', 'data_range')
@@ -94,11 +91,9 @@ class DataLevelPermissionsFilter(BaseFilterBackend):
                     return queryset
                 dataScope_list.append(ele.get('data_range'))
             dataScope_list = list(set(dataScope_list))
-
             # 4. 只为仅本人数据权限时只返回过滤本人数据，并且部门为自己本部门(考虑到用户会变部门，只能看当前用户所在的部门数据)
             if 0 in dataScope_list:
                 return queryset.filter(creator=request.user, dept_belong_id=user_dept_id)
-
             # 5. 自定数据权限 获取部门，根据部门过滤
             dept_list = []
             for ele in dataScope_list:

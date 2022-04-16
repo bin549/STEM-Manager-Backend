@@ -24,9 +24,7 @@ class UserSerializer(CustomModelSerializer):
 
 
 class UserCreateSerializer(CustomModelSerializer):
-    """
-    用户新增-序列化器
-    """
+
     username = serializers.CharField(max_length=50, validators=[CustomUniqueValidator(queryset=Users.objects.all(), message="账号必须唯一")])
     password = serializers.CharField(required=False, default=make_password(hashlib.md5('admin123456'.encode(encoding='UTF-8')).hexdigest()))
 

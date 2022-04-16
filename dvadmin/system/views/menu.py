@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: 猿小天
-@contact: QQ:1638245306
-@Created on: 2021/6/1 001 22:38
-@Remark: 菜单模块
-"""
 from rest_framework import serializers
 from rest_framework.decorators import action
-
 from dvadmin.system.models import Menu, MenuButton, Button
 from dvadmin.utils.json_response import SuccessResponse
 from dvadmin.utils.serializers import CustomModelSerializer
@@ -74,14 +67,7 @@ class WebRouterSerializer(CustomModelSerializer):
 
 
 class MenuViewSet(CustomModelViewSet):
-    """
-    菜单管理接口
-    list:查询
-    create:新增
-    update:修改
-    retrieve:单例
-    destroy:删除
-    """
+
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     create_serializer_class = MenuCreateSerializer

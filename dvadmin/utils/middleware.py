@@ -7,9 +7,7 @@ from dvadmin.utils.request_util import get_request_user, get_request_ip, get_req
 
 
 class ApiLoggingMiddleware(MiddlewareMixin):
-    """
-    用于记录API访问日志中间件
-    """
+
     def __init__(self, get_response=None):
         super().__init__(get_response)
         self.enable = getattr(settings, 'API_LOG_ENABLE', None) or False
