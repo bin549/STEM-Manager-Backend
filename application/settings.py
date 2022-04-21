@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'captcha',
     'course.apps.CourseConfig',
     'users.apps.UsersConfig',
+    'django_oss_storage',
 ]
 
 MIDDLEWARE = [
@@ -286,6 +287,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # 初始化需要执行的列表，用来初始化后执行
 INITIALIZE_RESET_LIST = []
 ALL_MODELS_OBJECTS = []  # 所有app models 对象
+
+DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+OSS_ACCESS_KEY_ID = os.environ.get('OSS_ACCESS_KEY_ID', '')
+OSS_ACCESS_KEY_SECRET = os.environ.get('OSS_ACCESS_KEY_SECRET', '')
+OSS_BUCKET_NAME = 'mortem'
+OSS_ENDPOINT = 'oss-cn-guangzhou.aliyuncs.com'
+
 # dvadmin 插件
 REGISTER_PLUGINS = (
     # ""

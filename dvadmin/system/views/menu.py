@@ -78,7 +78,6 @@ class MenuViewSet(CustomModelViewSet):
 
     @action(methods=['GET'], detail=True, permission_classes=[])
     def web_router(self, request):
-        """用于前端获取当前角色的路由"""
         user = request.user
         queryset = self.queryset.filter(status=1)
         if not user.is_superuser:

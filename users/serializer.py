@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile
+from .models import Profile, Message
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,4 +19,20 @@ class UserSerializer(serializers.ModelSerializer):
             "created_time",
             "user_type",
             "get_image",
+        )
+
+
+class MessageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Message
+        fields = (
+            "id",
+            "sender",
+            "recipient",
+            "title",
+            "content",
+            "is_read",
+            "created_time",
         )

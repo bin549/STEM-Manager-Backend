@@ -3,7 +3,7 @@
 # import operator
 import six
 from collections import OrderedDict
-# from functools import reduce
+from functools import reduce
 from django.db.models import Q, F
 from django.db.models.constants import LOOKUP_SEP
 from django_filters import utils

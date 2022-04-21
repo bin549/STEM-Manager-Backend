@@ -37,4 +37,5 @@ urlpatterns = [
     path('api/captcha/', CaptchaView.as_view()),
     path('apiLogin/', ApiLogin.as_view()),
     path('api/', include('course.urls')),
+    path('api/', include('users.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_URL)

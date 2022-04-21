@@ -22,10 +22,13 @@ class CourseAPI(APIView):
         return Response(obj)
 
     def post(self, request, format=None):
+
         return Response(1)
 
     def put(self, request, format=None):
         return Response(1)
 
-    def delete(self, request, format=None):
+    def delete(self, request, pk, format=None):
+
+        print(pk)
         return Response(1)
