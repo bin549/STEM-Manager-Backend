@@ -47,7 +47,7 @@ class DataLevelPermissionsFilter(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         """
-        接口白名单是否认证数据权限
+        接口白名单是否认证数据权限 
         """
         api = request.path  # 当前请求接口
         method = request.method  # 当前请求方法
